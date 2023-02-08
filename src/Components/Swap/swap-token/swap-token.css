@@ -1,0 +1,83 @@
+.swap-box-container {
+  margin: auto;
+  background-color: rgb(255, 255, 255);
+  border: 1px solid rgb(210, 217, 238);
+  box-shadow: rgb(51 53 72 / 4%) 8px 12px 20px, rgb(51 53 72 / 2%) 4px 6px 12px,
+    rgb(51 53 72 / 4%) 4px 4px 8px;
+  padding: 0px;
+  width: 50vw;
+  overflow: hidden auto;
+  max-width: 420px;
+  max-height: 52vh;
+  min-height: 52vh;
+  display: flex;
+  border-radius: 20px;
+  flex-direction: column;
+}
+
+.swap-content-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5%;
+}
+
+.swap-content-searchbar {
+  width: 90%;
+  padding: 2%;
+  margin: 1%;
+  border-radius: 10px;
+  border: 0.5px solid;
+}
+
+.swap-content-options {
+  display: flex;
+  flex-direction: row;
+  padding-top: 3%;
+}
+
+.token-infor {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 4px 20px;
+  gap: 16px;
+  cursor: pointer;
+}
+
+.token-name {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 3%;
+}
+
+.token-name img {
+  margin-right: 30px;
+  width: 36px;
+  height: 36px;
+  background: radial-gradient(
+    white 60%,
+    rgba(255, 255, 255, 0) calc(70% + 1px)
+  );
+  border-radius: 50%;
+  box-shadow: white 0px 0px 1px;
+}
+
+.token-name-symbol {
+  display: flex;
+  flex-direction: column;
+}
+
+.token-name {
+  font-weight: 600;
+  overflow: hidden;
+    white-space: nowrap; 
+    text-overflow: ellipsis;
+}
+
+.token-symbol {
+  text-align: start;
+  font-weight: 100;
+}

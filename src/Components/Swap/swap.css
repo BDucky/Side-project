@@ -1,0 +1,213 @@
+body {
+  background-color: rgba(238, 167, 205, 0.4);
+}
+
+.swap-container {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+}
+
+.swap-header {
+  display: flex;
+  flex-flow: row nowrap;
+  width: 100%;
+  justify-content: space-between;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  padding-top: 20px;
+}
+
+.swap-header-category {
+  display: flex;
+}
+
+.swap-header-category > div {
+  margin: 0 10%;
+}
+
+.swap-header-searchbar {
+  width: 30%;
+}
+
+.swap-header-searchbar > input {
+  width: 100%;
+}
+
+.swap-header-wallet {
+  display: flex;
+  width: 15%;
+}
+
+.swap-header-wallet > div {
+  margin: 0 5%;
+}
+
+.swap-connect-wallet {
+  display: flex;
+  flex-flow: row nowrap;
+  -webkit-box-align: center;
+  align-items: center;
+  background-color: rgba(251, 17, 142, 0.24);
+  border-radius: 9999px;
+  border: none;
+  padding: 0px;
+  height: 40px;
+}
+
+.swap-connect-wallet-button {
+  background-color: transparent;
+  border: none;
+  border-top-left-radius: 9999px;
+  border-bottom-left-radius: 9999px;
+  color: rgb(251, 17, 142);
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 16px;
+  transition: color 125ms ease-in 0s;
+}
+
+.wallet-btn-seperate-line {
+  height: 20px;
+  margin: 0px;
+  width: 1px;
+  background-color: rgb(251, 17, 142);
+}
+
+.wallet-btn-dark-mode {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  padding: 10px 16px 10px 4px;
+}
+
+.chain-change-btn {
+  box-sizing: border-box;
+  vertical-align: initial;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.swap-main-content {
+  display: flex;
+  justify-content: center;
+}
+
+.swap-main-container {
+  padding: 68px 8px 0px;
+  max-width: 480px;
+  width: 100%;
+}
+
+.swap-main {
+  position: relative;
+  background: rgb(255, 255, 255);
+  border-radius: 16px;
+  border: 1px solid rgb(210, 217, 238);
+  padding: 8px;
+  z-index: 1;
+  transition: transform 250ms ease 0s;
+}
+
+.swap-settings {
+  padding: 8px 12px;
+  margin-bottom: 8px;
+  width: 100%;
+  color: rgb(119, 128, 160);
+}
+
+.swap-setting-container {
+  width: 100%;
+  display: flex;
+  padding: 0px;
+  -webkit-box-align: center;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.swap-currency-from-container {
+  position: relative;
+  background-color: rgb(245, 246, 252);
+  border-radius: 12px;
+  padding: 16px;
+  color: rgb(119, 128, 160);
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 500;
+}
+
+.swap-currency-from-display {
+  display: flex;
+  flex-direction: row;
+  position: relative;
+  border-radius: 20px;
+  z-index: 1;
+  width: initial;
+  transition: height 1s ease 0s;
+  will-change: height;
+  justify-content: space-between;
+}
+
+.token-amount-input {
+  outline: none;
+  border: none;
+  background-color: transparent;
+}
+
+.swap-choose-currency-from {
+  -webkit-box-align: center;
+  align-items: center;
+  background-color: rgb(232, 236, 251);
+  opacity: 1;
+  box-shadow: none;
+  color: rgb(13, 17, 28);
+  cursor: pointer;
+  height: unset;
+  border-radius: 16px;
+  outline: none;
+  user-select: none;
+  border: none;
+  width: initial;
+  padding: 4px 8px 4px 4px;
+  gap: 8px;
+  -webkit-box-pack: justify;
+  justify-content: space-between;
+  margin-left: 12px;
+  visibility: visible;
+}
+
+.swap-from-img {
+  width: 24px;
+  height: 24px;
+  background: radial-gradient(
+    white 60%,
+    rgba(255, 255, 255, 0) calc(70% + 1px)
+  );
+  border-radius: 50%;
+  box-shadow: white 0px 0px 1px;
+}
+
+.swap-connect-wallet-main-button {
+  background-color: transparent;
+  inset: 0px;
+  height: 100%;
+  width: 100%;
+  font-size: 20px;
+  font-weight: 600;
+  border: none;
+  color: rgb(251, 17, 142);
+  cursor: pointer;
+  background-color: rgba(251, 17, 142, 0.24);
+  border-radius: 9999px;
+  border: none;
+  padding: 0px;
+  height: 40px;
+}
+
+.main-button-container {
+  margin-top: 20px;
+}
+
+.popup-content {
+  z-index: 10;
+}
