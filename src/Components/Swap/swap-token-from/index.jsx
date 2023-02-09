@@ -2,18 +2,37 @@ import React, { useEffect, useState } from "react";
 import "./swap-token.css";
 import data from "../../data/data.json";
 
-const SwapToken = () => {
+const SwapTokenFrom = ({
+  tokenFromChosen,
+  setTokenFromChosen,
+  setShowTokenFrom,
+}) => {
   const tokens = data.tokens;
-  console.log(tokens);
+
+  const handleTokenChosen = (tokenChosen) => {
+    setTokenFromChosen(tokenChosen);
+  };
+
+  const handleCloseTokenFromList = () => {
+    setShowTokenFrom(false);
+  };
 
   const displayToken = () => {
     return tokens.map((token, index) => {
       return (
-        <div key={index} className="token-infor">
+        <div
+          key={index}
+          className="token-infor"
+          onClick={() => handleTokenChosen(token.symbol)}
+        >
           <div className="token-name">
             <img src={token.logoURI} />
             <div className="token-name-symbol">
-              <div className="token-name">{token.name.length > 15 ? token.name.substring(0, 15) + "..." : token.name}</div>
+              <div className="token-name">
+                {token.name.length > 15
+                  ? token.name.substring(0, 15) + "..."
+                  : token.name}
+              </div>
               <div className="token-symbol">{token.symbol}</div>
             </div>
           </div>
@@ -30,7 +49,7 @@ const SwapToken = () => {
           <div className="swap-content-header">
             <div>Select a Token</div>
             <div>
-              <button>X</button>
+              <button onClick={handleCloseTokenFromList}>X</button>
             </div>
           </div>
           <div>
@@ -64,4 +83,4 @@ const SwapToken = () => {
   );
 };
 
-export default SwapToken;
+export default SwapTokenFrom;

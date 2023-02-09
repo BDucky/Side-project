@@ -86,6 +86,16 @@ body {
   box-sizing: border-box;
   vertical-align: initial;
   -webkit-tap-highlight-color: transparent;
+  flex-direction: row;
+  display: flex;
+  grid-gap: 8px;
+  gap: 8px;
+  height: 40px;
+  align-items: center;
+}
+
+.chain-btn {
+  display: flex;
 }
 
 .swap-main-content {
