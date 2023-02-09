@@ -144,7 +144,7 @@ const Swap = () => {
               </svg>
             </button>
           </div>
-          {!showChainPanel ? <ChainPanel /> : null}
+          {showChainPanel === true ? <ChainPanel /> : null}
           <div className="swap-connect-wallet">
             <ConnectWalletButton
               onClick={walletConnected}
@@ -216,7 +216,7 @@ const Swap = () => {
                       </svg>
                     </button>
                   </div>
-                  {!showSettingPanel ? <SettingPanel /> : null}
+                  {showSettingPanel === true ? <SettingPanel /> : null}
                 </div>
               </div>
             </div>
