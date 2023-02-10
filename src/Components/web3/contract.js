@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Web3 from "web3";
 
-const switchNetwork = async ({ chainId, chainName = 'Binance Smart Chain', ...others }) => {
+const switchNetwork = async ({ chainId, chainName = '', ...others }) => {
     // {
     //     chainId: Web3.utils.toHex(chainId),
     //     chainName: ,

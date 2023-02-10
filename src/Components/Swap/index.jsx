@@ -136,9 +136,9 @@ const Swap = () => {
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="#7780A0"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
               >
                 <polyline points="6 9 12 15 18 9"></polyline>
               </svg>
@@ -146,7 +146,7 @@ const Swap = () => {
           </div>
           {showChainPanel === true ? <ChainPanel /> : null}
           <div className="swap-connect-wallet">
-            <ConnectWalletButton
+            <button
               onClick={walletConnected}
               className="swap-connect-wallet-button"
             >
@@ -158,7 +158,7 @@ const Swap = () => {
                     connectedAccount.length
                   )
                 : "Connect Wallet!"}
-            </ConnectWalletButton>
+            </button>
             <div className="wallet-btn-seperate-line"></div>
             <button className="wallet-btn-dark-mode">
               <svg
@@ -168,9 +168,9 @@ const Swap = () => {
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="#FB118E"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
                 data-testid="navbar-wallet-dropdown"
               >
                 <polyline points="6 9 12 15 18 9"></polyline>
@@ -206,9 +206,9 @@ const Swap = () => {
                         viewBox="0 0 24 24"
                         fill="none"
                         stroke="currentColor"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
                         class="sc-1ndknrv-0 jDcEjt"
                       >
                         <circle cx="12" cy="12" r="3"></circle>
@@ -268,9 +268,9 @@ const Swap = () => {
                   viewBox="0 0 24 24"
                   fill="none"
                   stroke="#0D111C"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
                   onClick={handleSwap}
                 >
                   <line x1="12" y1="5" x2="12" y2="19"></line>
