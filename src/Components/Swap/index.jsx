@@ -9,6 +9,7 @@ import SwapTokenTo from "./swap-token-to";
 import SwapTokenFrom from "./swap-token-from";
 import SettingPanel from "./setting-panel";
 import ChainPanel from "./chain-panel";
+import Abi from ".././data/abi.json"
 
 const Swap = () => {
   const [connectedAccount, setConnectedAccount] = useState("Connect Wallet!");
@@ -19,6 +20,10 @@ const Swap = () => {
   const [tokenToChosen, setTokenToChosen] = useState("Select Token");
   const [showSettingPanel, setShowSettingPanel] = useState(false);
   const [showChainPanel, setShowChainPanel] = useState(false);
+
+  const contractAddress = "0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D"
+
+  const contractAbi = Abi
 
   useEffect(() => {
     setShowTokenFrom();
@@ -107,6 +112,44 @@ const Swap = () => {
     });
   });
 
+  const loadContract = async (contractAbi, contractAddress) => {
+    window.web3 = new Web3(window.web3.currentProvider);
+    const web3 = window.web3;
+    const contract = new web3.eth.Contract(contractAbi, contractAddress);
+
+    return contract;
+  }
+
+  const swapETH = async () => {
+    const { ethereum } = window;
+    window.web3 = new Web3(ethereum);
+    await ethereum.enable();
+    window.web3 = new Web3(window.web3.currentProvider);
+    const web3 = window.web3;
+
+    const contractAddressCheckSum = web3.utils.toChecksumAddress(
+      contractAddress
+    );
+    const addressFrom = web3.utils.toChecksumAddress(
+      "0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6"
+    )
+    const addressTo = web3.utils.toChecksumAddress(
+      "0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984"
+    )
+    const addressSend = web3.utils.toChecksumAddress(
+      "0xB83195a58496a190cA4126E0173D5CC21714efA0"
+    )
+    const balanceconverted = await web3.utils.toWei("0.001")
+    console.log(balanceconverted);
+    const contract = await loadContract(contractAbi, contractAddressCheckSum);
+    const signedTxn = contract.methods.swapExactETHForTokens(1357079841492384, [addressFrom, addressTo], addressSend, 9999999999).send({
+      from: addressSend,
+      gas: 1000000,
+      value: 1000000000000000,
+    });
+    console.log(signedTxn);
+  }
+
   return (
     <div className="swap-container">
       <div className="swap-header">
@@ -152,11 +195,11 @@ const Swap = () => {
             >
               {connectedAccount !== "Connect Wallet!"
                 ? connectedAccount.substring(0, 5) +
-                  "....." +
-                  connectedAccount.substring(
-                    connectedAccount.length - 4,
-                    connectedAccount.length
-                  )
+                "....." +
+                connectedAccount.substring(
+                  connectedAccount.length - 4,
+                  connectedAccount.length
+                )
                 : "Connect Wallet!"}
             </button>
             <div className="wallet-btn-seperate-line"></div>
@@ -318,7 +361,7 @@ const Swap = () => {
               </div>
             </div>
             <div className="main-button-container">
-              <button className="swap-connect-wallet-main-button">
+              <button className="swap-connect-wallet-main-button" onClick={swapETH}>
                 Connect Wallet
               </button>
             </div>
