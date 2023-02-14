@@ -20,6 +20,7 @@ const Swap = () => {
   const [tokenToChosen, setTokenToChosen] = useState("Select Token");
   const [showSettingPanel, setShowSettingPanel] = useState(false);
   const [showChainPanel, setShowChainPanel] = useState(false);
+  const [amountOutMin, setAmountOutMin] = useState("")
 
   const contractAddress = "0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D"
 
@@ -120,6 +121,34 @@ const Swap = () => {
     return contract;
   }
 
+  const getAmountsOut = async (amountIn) => {
+    const { ethereum } = window;
+    window.web3 = new Web3(ethereum);
+    await ethereum.enable();
+    window.web3 = new Web3(window.web3.currentProvider);
+    const web3 = window.web3;
+
+    const contractAddressCheckSum = web3.utils.toChecksumAddress(
+      contractAddress
+    );
+    const addressFrom = web3.utils.toChecksumAddress(
+      "0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6"
+    )
+    const addressTo = web3.utils.toChecksumAddress(
+      "0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984"
+    )
+    const addressSend = web3.utils.toChecksumAddress(
+      "0xB83195a58496a190cA4126E0173D5CC21714efA0"
+    )
+    const contract = await loadContract(contractAbi, contractAddressCheckSum);
+    const balanceconverted = await web3.utils.toWei(`${amountIn}`)
+    const signedTxn = contract.methods.getAmountsOut(1000000000000000, [addressFrom, addressTo]).call().then((result) => {
+      console.log(result[1]);
+      setAmountOutMin(result[1]) 
+    });
+    console.log(amountOutMin)
+  }
+
   const swapETH = async () => {
     const { ethereum } = window;
     window.web3 = new Web3(ethereum);
@@ -140,9 +169,8 @@ const Swap = () => {
       "0xB83195a58496a190cA4126E0173D5CC21714efA0"
     )
     const balanceconverted = await web3.utils.toWei("0.001")
-    console.log(balanceconverted);
     const contract = await loadContract(contractAbi, contractAddressCheckSum);
-    const signedTxn = contract.methods.swapExactETHForTokens(1357079841492384, [addressFrom, addressTo], addressSend, 9999999999).send({
+    const signedTxn = contract.methods.swapExactETHForTokens(amountOutMin, [addressFrom, addressTo], addressSend, 9999999999).send({
       from: addressSend,
       gas: 1000000,
       value: 1000000000000000,
