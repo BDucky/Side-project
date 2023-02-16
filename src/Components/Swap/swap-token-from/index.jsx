@@ -6,11 +6,13 @@ const SwapTokenFrom = ({
   tokenFromChosen,
   setTokenFromChosen,
   setShowTokenFrom,
+  setFromTokenAddress,
 }) => {
   const tokens = data.tokens;
 
   const handleTokenChosen = (tokenChosen) => {
-    setTokenFromChosen(tokenChosen);
+    setTokenFromChosen(tokenChosen.symbol);
+    setFromTokenAddress(tokenChosen.address);
   };
 
   const handleCloseTokenFromList = () => {
@@ -23,7 +25,7 @@ const SwapTokenFrom = ({
         <div
           key={index}
           className="token-infor"
-          onClick={() => handleTokenChosen(token.symbol)}
+          onClick={() => handleTokenChosen(token)}
         >
           <div className="token-name">
             <img src={token.logoURI} />

@@ -2,11 +2,17 @@ import React, { useEffect, useState } from "react";
 import "./swap-token.css";
 import data from "../../data/data.json";
 
-const SwapTokenTo = ({ tokenToChosen, setTokenToChosen, setShowTokenTo }) => {
+const SwapTokenTo = ({
+  tokenToChosen,
+  setTokenToChosen,
+  setShowTokenTo,
+  setToTokenAddress,
+}) => {
   const tokens = data.tokens;
 
   const handleTokenChosen = (tokenChosen) => {
-    setTokenToChosen(tokenChosen);
+    setTokenToChosen(tokenChosen.symbol);
+    setToTokenAddress(tokenChosen.address);
   };
 
   const handleCloseTokenToList = () => {
@@ -19,7 +25,7 @@ const SwapTokenTo = ({ tokenToChosen, setTokenToChosen, setShowTokenTo }) => {
         <div
           key={index}
           className="token-infor"
-          onClick={() => handleTokenChosen(token.symbol)}
+          onClick={() => handleTokenChosen(token)}
         >
           <div className="token-name">
             <img src={token.logoURI} />
