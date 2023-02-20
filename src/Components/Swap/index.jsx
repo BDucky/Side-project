@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "./swap.css";
 import { walletConnected } from "../web3/connect-wallet";
 import switchNetwork from "../web3/contract";
@@ -6,10 +6,12 @@ import Web3 from "web3";
 import { ConnectWalletButton } from "../web3/wallet/wallet";
 import data from ".././data/data.json";
 import SwapTokenTo from "./swap-token-to";
+import TokenAbi from ".././data/erc20.json"
 import SwapTokenFrom from "./swap-token-from";
 import SettingPanel from "./setting-panel";
 import ChainPanel from "./chain-panel";
 import Abi from ".././data/abi.json";
+import { resolve } from "path-browserify";
 
 const Swap = () => {
   const [connectedAccount, setConnectedAccount] = useState("Connect Wallet!");
@@ -20,7 +22,9 @@ const Swap = () => {
   const [tokenToChosen, setTokenToChosen] = useState("Select Token");
   const [showSettingPanel, setShowSettingPanel] = useState(false);
   const [showChainPanel, setShowChainPanel] = useState(false);
-  const [amountOutMin, setAmountOutMin] = useState("");
+  // const [amountOutMin, setAmountOutMin] = useState("");
+  const amountOutMin = useRef()
+  const allowanceNumber = useRef()
   const [fromTokenAddress, setFromTokenAddress] = useState(
     "0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6"
   );
@@ -30,8 +34,10 @@ const Swap = () => {
 
   const walletAddress = "0xB83195a58496a190cA4126E0173D5CC21714efA0";
   const contractAddress = "0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D";
+  const tokenContractAddress = "0xc3761EB917CD790B30dAD99f6Cc5b4Ff93C4F9eA"
 
   const contractAbi = Abi;
+  const tokenAbi = TokenAbi;
 
   const WETHTokenAddress = "0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6";
   const UniTokenAddress = "0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984";
@@ -39,9 +45,6 @@ const Swap = () => {
   const testTokenOneAddress = "0x84173f89B03acFB8c6378f32599ED3600B2049d6";
   const testTokenTwoAddress = "0x272c1f3c822648148BE82b2c86Ee1dd4E3574a7f";
   const testTokenThreeAddress = "0xf4c17ef851496Cbd45Ae861d5d43C3C30dB73caD";
-
-  console.log(fromTokenAddress);
-  console.log(toTokenAddress);
 
   useEffect(() => {
     setShowTokenFrom();
@@ -123,6 +126,7 @@ const Swap = () => {
   };
 
   useEffect(() => {
+    initWeb3()
     loadWeb3({
       onAccountChanged: (accounts) => {
         changeAccount(accounts);
@@ -138,7 +142,7 @@ const Swap = () => {
     return contract;
   };
 
-  const getAmountsOut = async (amountIn) => {
+  const initWeb3 = async () => {
     const { ethereum } = window;
     window.web3 = new Web3(ethereum);
     await ethereum.enable();
@@ -147,25 +151,70 @@ const Swap = () => {
 
     const contractAddressCheckSum =
       web3.utils.toChecksumAddress(contractAddress);
-    const addressFrom = web3.utils.toChecksumAddress(fromTokenAddress);
-    const addressTo = web3.utils.toChecksumAddress(toTokenAddress);
+    const addressFrom = web3.utils.toChecksumAddress("0x84173f89B03acFB8c6378f32599ED3600B2049d6");
+    const addressTo = web3.utils.toChecksumAddress("0x272c1f3c822648148BE82b2c86Ee1dd4E3574a7f");
+    const addressEth = web3.utils.toChecksumAddress("0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6");
     const addressSend = web3.utils.toChecksumAddress(
       "0xB83195a58496a190cA4126E0173D5CC21714efA0"
     );
+  }
+
+  const setAmountsOutOnClick = async () => {
+    const contractAddressCheckSum =
+      window.web3.utils.toChecksumAddress(contractAddress);
+    const addressFrom = window.web3.utils.toChecksumAddress("0x84173f89B03acFB8c6378f32599ED3600B2049d6");
+    const addressTo = window.web3.utils.toChecksumAddress("0x272c1f3c822648148BE82b2c86Ee1dd4E3574a7f");
+    const addressEth = window.web3.utils.toChecksumAddress("0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6");
+    const addressSend = window.web3.utils.toChecksumAddress(
+      "0xB83195a58496a190cA4126E0173D5CC21714efA0"
+    );
     const contract = await loadContract(contractAbi, contractAddressCheckSum);
-    const balanceconverted = await web3.utils.toWei("0.001");
-    const signedTxn = contract.methods
-      .getAmountsOut(balanceconverted, [addressFrom, addressTo])
-      .call()
-      .then((result) => {
-        console.log(result[1]);
-        setAmountOutMin(result[1]);
-      });
-    console.log(amountOutMin);
-  };
+    const balanceconverted = await window.web3.utils.toWei("0.01");
+    await new Promise((resolve) => {
+      contract.methods
+        .getAmountsOut(balanceconverted, [addressFrom, addressEth, addressTo])
+        .call()
+        .then((result) => {
+          console.log(result);
+          // setAmountOutMin(parseInt(result[2]));
+          amountOutMin.current = parseInt(result[2])
+          resolve(0)
+        });
+    })
+  }
+
+  const checkAllowance = async (balanceconverted, tokenAddress) => {
+    const contractAddressCheckSum =
+      window.web3.utils.toChecksumAddress(contractAddress);
+    const addressFrom = window.web3.utils.toChecksumAddress("0x84173f89B03acFB8c6378f32599ED3600B2049d6");
+    const addressTo = window.web3.utils.toChecksumAddress("0x272c1f3c822648148BE82b2c86Ee1dd4E3574a7f");
+    const addressEth = window.web3.utils.toChecksumAddress("0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6");
+    const addressSend = window.web3.utils.toChecksumAddress(
+      "0xB83195a58496a190cA4126E0173D5CC21714efA0"
+    );
+    const contract = await loadContract(tokenAbi, tokenAddress);
+    await new Promise((resolve) => {
+      contract.methods.allowance(addressSend, contractAddress).call().then((result) => {
+        console.log((result))
+        allowanceNumber.current = result
+        resolve(0)
+      })
+    })
+    // { allowanceNumber.current < balanceconverted ? setApprove : null }
+    if (allowanceNumber.current < balanceconverted) {
+      await contract.methods
+        .approve(contractAddressCheckSum, 1)
+        .send({
+          from: addressSend,
+          gas: 1000000,
+        });
+    }
+  }
 
   const swapETH = async () => {
-    getAmountsOut();
+    await setAmountsOutOnClick()
+    let getAmountOutMin = amountOutMin.current
+    console.log(getAmountOutMin)
     const { ethereum } = window;
     window.web3 = new Web3(ethereum);
     await ethereum.enable();
@@ -174,24 +223,27 @@ const Swap = () => {
 
     const contractAddressCheckSum =
       web3.utils.toChecksumAddress(contractAddress);
-    const addressFrom = web3.utils.toChecksumAddress(fromTokenAddress);
-    const addressTo = web3.utils.toChecksumAddress(toTokenAddress);
+    const addressFrom = web3.utils.toChecksumAddress("0x84173f89B03acFB8c6378f32599ED3600B2049d6");
+    const addressTo = web3.utils.toChecksumAddress("0x272c1f3c822648148BE82b2c86Ee1dd4E3574a7f");
+    const addressEth = web3.utils.toChecksumAddress("0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6");
     const addressSend = web3.utils.toChecksumAddress(
       "0xB83195a58496a190cA4126E0173D5CC21714efA0"
     );
-    const balanceconverted = await web3.utils.toWei("0.001");
+    console.log(getAmountOutMin)
+    const balanceconverted = await web3.utils.toWei("0.01");
+    await checkAllowance(balanceconverted, addressFrom);
     const contract = await loadContract(contractAbi, contractAddressCheckSum);
     const signedTxn = contract.methods
-      .swapExactETHForTokens(
-        amountOutMin*0.995,
-        [addressFrom, addressTo],
+      .swapExactTokensForTokens(
+        balanceconverted,
+        getAmountOutMin * 0.995,
+        [addressFrom, addressEth, addressTo],
         addressSend,
         9999999999
       )
       .send({
         from: addressSend,
         gas: 1000000,
-        value: balanceconverted,
       });
     console.log(signedTxn);
   };
@@ -278,11 +330,11 @@ const Swap = () => {
             >
               {connectedAccount !== "Connect Wallet!"
                 ? connectedAccount.substring(0, 5) +
-                  "....." +
-                  connectedAccount.substring(
-                    connectedAccount.length - 4,
-                    connectedAccount.length
-                  )
+                "....." +
+                connectedAccount.substring(
+                  connectedAccount.length - 4,
+                  connectedAccount.length
+                )
                 : "Connect Wallet!"}
             </button>
             <div className="wallet-btn-seperate-line"></div>
@@ -472,7 +524,7 @@ const Swap = () => {
           setToTokenAddress={setToTokenAddress}
         />
       ) : null}
-      <button onClick={addLiquidityETH}>Add liquidity</button>
+      <button onClick={checkAllowance}>Add liquidity</button>
     </div>
   );
 };
