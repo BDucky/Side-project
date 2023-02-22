@@ -162,14 +162,14 @@ const Swap = () => {
   const setAmountsOutOnClick = async () => {
     const contractAddressCheckSum =
       window.web3.utils.toChecksumAddress(contractAddress);
-    const addressFrom = window.web3.utils.toChecksumAddress("0x84173f89B03acFB8c6378f32599ED3600B2049d6");
+    const addressFrom = window.web3.utils.toChecksumAddress("0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984");
     const addressTo = window.web3.utils.toChecksumAddress("0x272c1f3c822648148BE82b2c86Ee1dd4E3574a7f");
     const addressEth = window.web3.utils.toChecksumAddress("0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6");
     const addressSend = window.web3.utils.toChecksumAddress(
       "0xB83195a58496a190cA4126E0173D5CC21714efA0"
     );
     const contract = await loadContract(contractAbi, contractAddressCheckSum);
-    const balanceconverted = await window.web3.utils.toWei("0.01");
+    const balanceconverted = await window.web3.utils.toWei("0.01", "ether");
     await new Promise((resolve) => {
       contract.methods
         .getAmountsOut(balanceconverted, [addressFrom, addressEth, addressTo])
@@ -186,7 +186,7 @@ const Swap = () => {
   const checkAllowance = async (balanceconverted, tokenAddress) => {
     const contractAddressCheckSum =
       window.web3.utils.toChecksumAddress(contractAddress);
-    const addressFrom = window.web3.utils.toChecksumAddress("0x84173f89B03acFB8c6378f32599ED3600B2049d6");
+    const addressFrom = window.web3.utils.toChecksumAddress("0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984");
     const addressTo = window.web3.utils.toChecksumAddress("0x272c1f3c822648148BE82b2c86Ee1dd4E3574a7f");
     const addressEth = window.web3.utils.toChecksumAddress("0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6");
     const addressSend = window.web3.utils.toChecksumAddress(
@@ -200,10 +200,11 @@ const Swap = () => {
         resolve(0)
       })
     })
+    const balanceApproved = await window.web3.utils.toWei("0.01", "ether");
     // { allowanceNumber.current < balanceconverted ? setApprove : null }
     if (allowanceNumber.current < balanceconverted) {
       await contract.methods
-        .approve(contractAddressCheckSum, 1)
+        .approve(contractAddressCheckSum, balanceApproved)
         .send({
           from: addressSend,
           gas: 1000000,
@@ -213,8 +214,9 @@ const Swap = () => {
 
   const swapETH = async () => {
     await setAmountsOutOnClick()
-    let getAmountOutMin = amountOutMin.current
+    const getAmountOutMin = amountOutMin.current
     console.log(getAmountOutMin)
+    // const roundedAmountOutMin = (Math.ceil(getAmountOutMin / 1000000000000000000) * 1000000000000000000)
     const { ethereum } = window;
     window.web3 = new Web3(ethereum);
     await ethereum.enable();
@@ -222,21 +224,20 @@ const Swap = () => {
     const web3 = window.web3;
 
     const contractAddressCheckSum =
-      web3.utils.toChecksumAddress(contractAddress);
-    const addressFrom = web3.utils.toChecksumAddress("0x84173f89B03acFB8c6378f32599ED3600B2049d6");
-    const addressTo = web3.utils.toChecksumAddress("0x272c1f3c822648148BE82b2c86Ee1dd4E3574a7f");
-    const addressEth = web3.utils.toChecksumAddress("0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6");
-    const addressSend = web3.utils.toChecksumAddress(
+      window.web3.utils.toChecksumAddress(contractAddress);
+    const addressFrom = window.web3.utils.toChecksumAddress("0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984");
+    const addressTo = window.web3.utils.toChecksumAddress("0x272c1f3c822648148BE82b2c86Ee1dd4E3574a7f");
+    const addressEth = window.web3.utils.toChecksumAddress("0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6");
+    const addressSend = window.web3.utils.toChecksumAddress(
       "0xB83195a58496a190cA4126E0173D5CC21714efA0"
     );
-    console.log(getAmountOutMin)
-    const balanceconverted = await web3.utils.toWei("0.01");
+    const balanceconverted = await web3.utils.toWei("0.01", "ether");
     await checkAllowance(balanceconverted, addressFrom);
     const contract = await loadContract(contractAbi, contractAddressCheckSum);
     const signedTxn = contract.methods
       .swapExactTokensForTokens(
         balanceconverted,
-        getAmountOutMin * 0.995,
+        (getAmountOutMin * 0.995).toString(),
         [addressFrom, addressEth, addressTo],
         addressSend,
         9999999999
@@ -284,6 +285,10 @@ const Swap = () => {
       });
     console.log(signedTxn);
   };
+
+  console.log(fromTokenAddress)
+  console.log(toTokenAddress)
+  console.log(connectedAccount)
 
   return (
     <div className="swap-container">
@@ -500,7 +505,7 @@ const Swap = () => {
                 className="swap-connect-wallet-main-button"
                 onClick={swapETH}
               >
-                Connect Wallet
+                Swap
               </button>
             </div>
           </div>
