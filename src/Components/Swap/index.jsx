@@ -29,7 +29,7 @@ const Swap = () => {
   const amountOutMin = useRef();
   const allowanceNumber = useRef();
   const [fromTokenAddress, setFromTokenAddress] = useState(
-    "0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6"
+    "0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6g"
   );
   const [toTokenAddress, setToTokenAddress] = useState(
     "0x84173f89B03acFB8c6378f32599ED3600B2049d6"
