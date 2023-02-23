@@ -101,6 +101,7 @@ body {
 .swap-main-content {
   display: flex;
   justify-content: center;
+  position: relative;
 }
 
 .swap-main-container {
