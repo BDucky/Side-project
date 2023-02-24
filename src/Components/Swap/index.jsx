@@ -28,11 +28,13 @@ const Swap = () => {
   // const [amountOutMin, setAmountOutMin] = useState("");
   const amountOutMin = useRef();
   const allowanceNumber = useRef();
+  const amountSwap = useRef();
+
   const [fromTokenAddress, setFromTokenAddress] = useState(
-    "0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6g"
+    "0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6"
   );
   const [toTokenAddress, setToTokenAddress] = useState(
-    "0x84173f89B03acFB8c6378f32599ED3600B2049d6"
+    ""
   );
 
   const walletAddress = "0xB83195a58496a190cA4126E0173D5CC21714efA0";
@@ -168,12 +170,20 @@ const Swap = () => {
     );
   };
 
+  const setAmountSwap = (e) => {
+    amountSwap.current = e.target.value;
+    console.log(amountSwap.current);
+  };
+
   const setAmountsOutOnClick = async (swapPath) => {
     const contractAddressCheckSum =
       window.web3.utils.toChecksumAddress(contractAddress);
     const contract = await loadContract(contractAbi, contractAddressCheckSum);
 
-    const balanceconverted = await window.web3.utils.toWei("0.01", "ether");
+    const balanceconverted = await window.web3.utils.toWei(
+      `${amountSwap.current}`,
+      "ether"
+    );
     await new Promise((resolve) => {
       contract.methods
         .getAmountsOut(
@@ -213,7 +223,10 @@ const Swap = () => {
           resolve(0);
         });
     });
-    const balanceApproved = await window.web3.utils.toWei("0.01", "ether");
+    const balanceApproved = await window.web3.utils.toWei(
+      `${amountSwap.current}`,
+      "ether"
+    );
     // { allowanceNumber.current < balanceconverted ? setApprove : null }
     if (allowanceNumber.current < balanceconverted) {
       await contract.methods
@@ -238,22 +251,10 @@ const Swap = () => {
     } else {
       setTransactionStatus("Transaction Failed");
     }
-
-    // const signature = await web3.eth.sign(txnHash, addressSend);
-    // const hasDeniedSignature = await web3.eth.personal.ecRecover(
-    //   txnHash,
-    //   signature
-    // );
-    // console.log(signature);
-    // console.log(hasDeniedSignature);
-
-    // if (hasDeniedSignature) {
-    //   alert("User has denied the transaction signature!");
-    // }
   };
 
   const swapETH = async () => {
-    // const roundedAmountOutMin = (Math.ceil(getAmountOutMin / 1000000000000000000) * 1000000000000000000)
+    await switchNetwork({ chainId: 5 });
     const { ethereum } = window;
     window.web3 = new Web3(ethereum);
     await ethereum.enable();
@@ -267,7 +268,10 @@ const Swap = () => {
     const addressEth = window.web3.utils.toChecksumAddress(WETHTokenAddress);
     const addressSend = window.web3.utils.toChecksumAddress(connectedAccount);
 
-    const balanceconverted = await web3.utils.toWei("0.01", "ether");
+    const balanceconverted = await web3.utils.toWei(
+      `${amountSwap.current}`,
+      "ether"
+    );
     const tokenSwapPath = [addressFrom, addressEth, addressTo];
     const ethSwapPath = [addressEth, addressTo];
     const swapToEthPath = [addressFrom, addressEth];
@@ -313,9 +317,8 @@ const Swap = () => {
           setTransactionStatus("User denied transaction");
         } else if (error) {
           setTransactionStatus("Transaction Failed");
-        } 
+        }
       });
-    console.log(signedTxn.then((result) => console.log(result)));
   };
 
   const addLiquidityETH = async (amountIn) => {
@@ -484,17 +487,15 @@ const Swap = () => {
               <div className="swap-currency-from-display">
                 <input
                   class="sc-1x3stf0-0 iIWDYd sc-3zewi2-11 diLZKF token-amount-input"
-                  inputmode="decimal"
                   autocomplete="off"
                   autocorrect="off"
-                  type="text"
+                  type="number"
                   pattern="^[0-9]*[.,]?[0-9]*$"
                   placeholder="0"
                   minlength="1"
                   maxlength="79"
                   spellcheck="false"
-                  value=""
-                  fdprocessedid="jjeu1d"
+                  onChange={setAmountSwap}
                 ></input>
                 <button
                   className="swap-choose-currency-from"
@@ -542,17 +543,15 @@ const Swap = () => {
               <div className="swap-currency-from-display">
                 <input
                   class="sc-1x3stf0-0 iIWDYd sc-3zewi2-11 diLZKF token-amount-input"
-                  inputmode="decimal"
                   autocomplete="off"
                   autocorrect="off"
-                  type="text"
+                  type="number"
                   pattern="^[0-9]*[.,]?[0-9]*$"
                   placeholder="0"
                   minlength="1"
                   maxlength="79"
                   spellcheck="false"
-                  value=""
-                  fdprocessedid="jjeu1d"
+                  // placeholder={window.web3.utils.fromWei(`${amountOutMin.current}`)}
                 ></input>
                 <button
                   className="swap-choose-currency-from"
@@ -606,7 +605,7 @@ const Swap = () => {
           setToTokenAddress={setToTokenAddress}
         />
       ) : null}
-      <button onClick={checkAllowance}>Add liquidity</button>
+      {/* <button onClick={checkAllowance}>Add liquidity</button> */}
     </div>
   );
 };

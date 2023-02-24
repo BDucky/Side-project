@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./swap-token.css";
-import data from "../../data/data.json";
+import data from "../../data/datatestnet.json";
 
 const SwapTokenFrom = ({
   tokenFromChosen,
@@ -60,22 +60,6 @@ const SwapTokenFrom = ({
               placeholder="Search name or paste address"
               className="swap-content-searchbar"
             />
-          </div>
-          <div className="swap-content-options">
-            <div>
-              <button className="swap-choose-currency-from">
-                <div class="sc-bczRLJ sc-nrd8cx-0 sc-nrd8cx-4 hJYFVB gBBPoP leSroW">
-                  <span>ETH</span>
-                </div>
-              </button>
-            </div>
-            <div>
-              <button className="swap-choose-currency-from">
-                <div class="sc-bczRLJ sc-nrd8cx-0 sc-nrd8cx-4 hJYFVB gBBPoP leSroW">
-                  <span>WETH</span>
-                </div>
-              </button>
-            </div>
           </div>
         </div>
         <hr />
